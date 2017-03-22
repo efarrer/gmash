@@ -1,0 +1,48 @@
+{
+    "memo": "9fd58fb79edbae001389f13b512e8e1c0f722598dbe568d05d5a7edce085f624",
+    "projects": [
+        {
+            "name": "github.com/davecgh/go-spew",
+            "version": "v1.1.0",
+            "revision": "346938d642f2ec3594ed81d874461961cd0faa76",
+            "packages": [
+                "spew"
+            ]
+        },
+        {
+            "name": "github.com/kr/pty",
+            "branch": "master",
+            "revision": "2c10821df3c3cf905230d078702dfbe9404c9b23",
+            "packages": [
+                "."
+            ]
+        },
+        {
+            "name": "github.com/pmezard/go-difflib",
+            "version": "v1.0.0",
+            "revision": "792786c7400a136282c1664665ae0a8db921c6c2",
+            "packages": [
+                "difflib"
+            ]
+        },
+        {
+            "name": "github.com/stretchr/testify",
+            "branch": "master",
+            "revision": "d77da356e56a7428ad25149ca77381849a6a5232",
+            "packages": [
+                "assert"
+            ]
+        },
+        {
+            "name": "golang.org/x/crypto",
+            "branch": "master",
+            "revision": "453249f01cfeb54c3d549ddb75ff152ca243f9d8",
+            "packages": [
+                "curve25519",
+                "ed25519",
+                "ed25519/internal/edwards25519",
+                "ssh"
+            ]
+        }
+    ]
+}
