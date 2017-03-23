@@ -6,11 +6,27 @@ import (
 	"gmash/sshd"
 	"log"
 	"net"
+	"os"
+	"os/user"
+	"path"
 
 	"golang.org/x/crypto/ssh"
 )
 
 func main() {
+	// Get the user's home directory
+	usr, err := user.Current()
+	if err != nil {
+		log.Fatalf("Unable to get user's home directory (%s)\n", err)
+	}
+	gmashDir := path.Join(usr.HomeDir, ".gmash")
+
+	// Create the gmash dir
+	err = os.MkdirAll(gmashDir, 0700)
+	if err != nil {
+		log.Fatalf("Unable to create %s (%s)\n", gmashDir, err)
+	}
+
 	// Generate a random user password for this session
 	masterPassword, err := auth.GeneratePassword(10)
 	if err != nil {
@@ -27,7 +43,7 @@ func main() {
 	)
 
 	// Generate server ssh keys
-	signer, err := auth.GenerateKeys()
+	signer, err := auth.TryLoadKeys(path.Join(gmashDir, "key"))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -37,11 +53,12 @@ func main() {
 	if err != nil {
 		log.Fatalf("%s\n", err)
 	}
+	defer func() { _ = listener.Close() }()
 
 	fmt.Printf("Started server with RSA key: %s\n", auth.GetFingerPrint(signer))
 	fmt.Printf("To connect type:\n")
 	fmt.Printf("ssh -o UserKnownHostsFile=/dev/null localhost -p %d\n", listener.Addr().(*net.TCPAddr).Port)
 	fmt.Printf("password %s\n", masterPassword)
-	defer func() { _ = listener.Close() }()
+
 	select {}
 }
