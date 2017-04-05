@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"gmash/auth"
+	"gmash/ip"
 	"gmash/sshd"
 	"log"
 	"net"
@@ -49,7 +50,12 @@ func main() {
 	}
 	sshConf.AddHostKey(signer)
 
-	listener, err := sshd.SSHServer("127.0.0.1:", &sshConf, shellConf)
+	pubIP, err := ip.LinuxPublicIP()
+	if err != nil {
+		log.Fatalf("%s\n", err)
+	}
+
+	listener, err := sshd.SSHServer(pubIP+":", &sshConf, shellConf)
 	if err != nil {
 		log.Fatalf("%s\n", err)
 	}
@@ -57,7 +63,7 @@ func main() {
 
 	fmt.Printf("Started server with RSA key: %s\n", auth.GetFingerPrint(signer))
 	fmt.Printf("To connect type:\n")
-	fmt.Printf("ssh -o UserKnownHostsFile=/dev/null localhost -p %d\n", listener.Addr().(*net.TCPAddr).Port)
+	fmt.Printf("ssh -o UserKnownHostsFile=/dev/null %s -p %d\n", pubIP, listener.Addr().(*net.TCPAddr).Port)
 	fmt.Printf("password %s\n", masterPassword)
 
 	select {}

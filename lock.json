@@ -1,5 +1,5 @@
 {
-    "memo": "9fd58fb79edbae001389f13b512e8e1c0f722598dbe568d05d5a7edce085f624",
+    "memo": "97646bd94107d403a13bb6ac710b29d987c42faa97eda4ebb3fa37415d095ede",
     "projects": [
         {
             "name": "github.com/davecgh/go-spew",
@@ -11,7 +11,7 @@
         },
         {
             "name": "github.com/kr/pty",
-            "branch": "master",
+            "version": "v1.0.0",
             "revision": "2c10821df3c3cf905230d078702dfbe9404c9b23",
             "packages": [
                 "."
@@ -27,8 +27,8 @@
         },
         {
             "name": "github.com/stretchr/testify",
-            "branch": "master",
-            "revision": "d77da356e56a7428ad25149ca77381849a6a5232",
+            "version": "v1.1.4",
+            "revision": "69483b4bd14f5845b5a1e55bca19e954e827f1d0",
             "packages": [
                 "assert"
             ]
@@ -36,7 +36,7 @@
         {
             "name": "golang.org/x/crypto",
             "branch": "master",
-            "revision": "453249f01cfeb54c3d549ddb75ff152ca243f9d8",
+            "revision": "c78caca803c95773f48a844d3dcab04b9bc4d6dd",
             "packages": [
                 "curve25519",
                 "ed25519",

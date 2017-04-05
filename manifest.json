@@ -1,13 +1,1 @@
-{
-    "dependencies": {
-        "github.com/kr/pty": {
-            "branch": "master"
-        },
-        "github.com/stretchr/testify": {
-            "branch": "master"
-        },
-        "golang.org/x/crypto": {
-            "branch": "master"
-        }
-    }
-}
+{}
