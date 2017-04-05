@@ -61,7 +61,10 @@ func main() {
 	}
 	defer func() { _ = listener.Close() }()
 
-	fmt.Printf("Started server with RSA key: %s\n", auth.GetFingerPrint(signer))
+	fpMD5, fpSHA256 := auth.GetFingerPrint(signer)
+	fmt.Printf("Started server with RSA key: %s\n", fpMD5)
+	fmt.Printf("Started server with RSA key: %s\n", fpSHA256)
+	fmt.Println("")
 	fmt.Printf("To connect type:\n")
 	fmt.Printf("ssh -o UserKnownHostsFile=/dev/null %s -p %d\n", pubIP, listener.Addr().(*net.TCPAddr).Port)
 	fmt.Printf("password %s\n", masterPassword)

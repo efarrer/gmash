@@ -66,8 +66,9 @@ func TestGetFingerPrint_HappyPath(t *testing.T) {
 	signer, err := ssh.NewSignerFromKey(key)
 	assert.NoError(t, err)
 
-	fp := GetFingerPrint(signer)
-	assert.Equal(t, len(fp), 47)
+	fpMD5, fpSHA256 := GetFingerPrint(signer)
+	assert.Equal(t, len(fpMD5), 47)
+	assert.Equal(t, len(fpSHA256), 50)
 }
 
 func TestCreatePasswordCallback_MatchingPassword(t *testing.T) {

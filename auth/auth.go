@@ -56,8 +56,9 @@ func TryLoadKeys(keyPath string) (ssh.Signer, error) {
 }
 
 // GetFingerPrint takes returns the keys MD5 fingerprint of the signer
-func GetFingerPrint(signer ssh.Signer) string {
-	return ssh.FingerprintLegacyMD5(signer.PublicKey())
+func GetFingerPrint(signer ssh.Signer) (string, string) {
+	return ssh.FingerprintLegacyMD5(signer.PublicKey()),
+		ssh.FingerprintSHA256(signer.PublicKey())
 }
 
 // CreatePasswordCallback creates a function for authenticating via password
