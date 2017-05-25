@@ -388,7 +388,7 @@ func TestSSHServer_ProcessesConnections(t *testing.T) {
 func createTestServer(shell string) (int, func(), error) {
 	sshConf := ssh.ServerConfig{NoClientAuth: true}
 	shellConf := DefaultShellConf(shell, func(err error) {})
-	signer, err := auth.GenerateKeys()
+	signer, err := auth.TryLoadKeys("/dev/null")
 	if err != nil {
 		return 0, func() {}, err
 	}
