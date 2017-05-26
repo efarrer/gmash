@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
-	"gmash/auth"
 	"io"
 	"io/ioutil"
 	"net"
@@ -14,6 +13,8 @@ import (
 	"strconv"
 	"sync"
 	"testing"
+
+	"github.com/efarrer/gmash/auth"
 
 	"golang.org/x/crypto/ssh"
 

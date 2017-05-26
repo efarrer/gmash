@@ -2,11 +2,12 @@ package sshd
 
 import (
 	"fmt"
-	"gmash/payload"
 	"io"
 	"net"
 	"os/exec"
 	"sync"
+
+	"github.com/efarrer/gmash/payload"
 
 	"github.com/kr/pty"
 

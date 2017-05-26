@@ -2,14 +2,15 @@ package main
 
 import (
 	"fmt"
-	"gmash/auth"
-	"gmash/ip"
-	"gmash/sshd"
 	"log"
 	"net"
 	"os"
 	"os/user"
 	"path"
+
+	"github.com/efarrer/gmash/auth"
+	"github.com/efarrer/gmash/ip"
+	"github.com/efarrer/gmash/sshd"
 
 	"golang.org/x/crypto/ssh"
 )
