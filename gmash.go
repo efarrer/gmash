@@ -20,32 +20,34 @@ import (
 )
 
 func main() {
+	logger := log.New(os.Stderr, "", 0)
+
 	var local = flag.Bool("local", false, "Whether to only allow connections over the local network")
 	var global = flag.Bool("global", false, "Whether to allow connections from anywhere")
 
 	flag.Parse()
 
 	if !*local && !*global {
-		log.Fatal("You must specify either the -local or -global arguments")
+		logger.Fatal("You must specify either the -local or -global arguments")
 	}
 
 	// Get the user's home directory
 	usr, err := user.Current()
 	if err != nil {
-		log.Fatalf("Unable to get user's home directory (%s)\n", err)
+		logger.Fatalf("Unable to get user's home directory (%s)\n", err)
 	}
 	gmashDir := path.Join(usr.HomeDir, ".gmash")
 
 	// Create the gmash dir
 	err = os.MkdirAll(gmashDir, 0700)
 	if err != nil {
-		log.Fatalf("Unable to create %s (%s)\n", gmashDir, err)
+		logger.Fatalf("Unable to create %s (%s)\n", gmashDir, err)
 	}
 
 	// Generate a random user password for this session
 	masterPassword, err := auth.GeneratePassword(10)
 	if err != nil {
-		log.Fatalf("Unable to generate password (%s)", err)
+		logger.Fatalf("Unable to generate password (%s)", err)
 	}
 
 	// Construct the ssh configuration with password authentication
@@ -60,13 +62,13 @@ func main() {
 	// Generate server ssh keys
 	signer, err := auth.TryLoadKeys(path.Join(gmashDir, "key"))
 	if err != nil {
-		log.Fatal(err)
+		logger.Fatal(err)
 	}
 	sshConf.AddHostKey(signer)
 
 	pubIP, err := ip.LinuxPublicIP()
 	if err != nil {
-		log.Fatalf("%s\n", err)
+		logger.Fatalf("%s\n", err)
 	}
 
 	if *global {
@@ -75,7 +77,7 @@ func main() {
 
 	listener, err := sshd.SSHServer(pubIP+":", &sshConf, shellConf)
 	if err != nil {
-		log.Fatalf("%s\n", err)
+		logger.Fatalf("%s\n", err)
 	}
 	defer func() { _ = listener.Close() }()
 
