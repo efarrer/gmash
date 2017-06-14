@@ -1,21 +1,34 @@
 package main
 
 import (
+	"context"
+	"flag"
 	"fmt"
 	"log"
 	"net"
 	"os"
+	"os/signal"
 	"os/user"
 	"path"
 
 	"github.com/efarrer/gmash/auth"
 	"github.com/efarrer/gmash/ip"
+	"github.com/efarrer/gmash/ngrok"
 	"github.com/efarrer/gmash/sshd"
 
 	"golang.org/x/crypto/ssh"
 )
 
 func main() {
+	var local = flag.Bool("local", false, "Whether to only allow connections over the local network")
+	var global = flag.Bool("global", false, "Whether to allow connections from anywhere")
+
+	flag.Parse()
+
+	if !*local && !*global {
+		log.Fatal("You must specify either the -local or -global arguments")
+	}
+
 	// Get the user's home directory
 	usr, err := user.Current()
 	if err != nil {
@@ -56,19 +69,42 @@ func main() {
 		log.Fatalf("%s\n", err)
 	}
 
+	if *global {
+		pubIP = "0.0.0.0"
+	}
+
 	listener, err := sshd.SSHServer(pubIP+":", &sshConf, shellConf)
 	if err != nil {
 		log.Fatalf("%s\n", err)
 	}
 	defer func() { _ = listener.Close() }()
 
+	ctx, cancel := context.WithCancel(context.Background())
+
+	port := listener.Addr().(*net.TCPAddr).Port
+	if *global {
+		resp := ngrok.Execute(ctx, port)
+		if resp.Err != nil {
+			return
+		}
+		pubIP = resp.Value.Host
+		port = resp.Value.Port
+	}
+
 	fpMD5, fpSHA256 := auth.GetFingerPrint(signer)
 	fmt.Printf("Started server with RSA key: %s\n", fpMD5)
 	fmt.Printf("Started server with RSA key: %s\n", fpSHA256)
 	fmt.Println("")
 	fmt.Printf("To connect type:\n")
-	fmt.Printf("ssh -o UserKnownHostsFile=/dev/null %s -p %d\n", pubIP, listener.Addr().(*net.TCPAddr).Port)
+	fmt.Printf("ssh -o UserKnownHostsFile=/dev/null %s -p %d\n", pubIP, port)
 	fmt.Printf("password %s\n", masterPassword)
 
-	select {}
+	signalCh := make(chan os.Signal, 1)
+	signal.Notify(signalCh, os.Interrupt)
+	select {
+	case <-signalCh:
+		cancel()
+		fmt.Printf("Bubye\n")
+	case <-ctx.Done():
+	}
 }
