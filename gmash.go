@@ -87,7 +87,16 @@ func main() {
 	if *global {
 		resp := ngrok.Execute(ctx, port)
 		if resp.Err != nil {
-			return
+			switch resp.Err.Reason {
+			case ngrok.MissingNgrok:
+				logger.Fatalf("Can't find ngrok. Please install ngrok and make sure it's in your path. https://ngrok.com/download")
+			case ngrok.UnexecutableNgrok:
+				logger.Fatalf("Ngrok was found, but it couldn't be executed.")
+			case ngrok.MissingAuthToken:
+				logger.Fatalf("Ngrok's auth token must be installed. See: https://dashboard.ngrok.com/get-started")
+			default:
+				logger.Fatalf(resp.Err.Err.Error())
+			}
 		}
 		pubIP = resp.Value.Host
 		port = resp.Value.Port
