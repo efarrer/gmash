@@ -108,7 +108,7 @@ func main() {
 	fmt.Println("")
 	fmt.Printf("To connect type:\n")
 	fmt.Printf("ssh -o UserKnownHostsFile=/dev/null %s -p %d\n", pubIP, port)
-	fmt.Printf("password %s\n", masterPassword)
+	fmt.Printf("password: %s\n", masterPassword)
 
 	signalCh := make(chan os.Signal, 1)
 	signal.Notify(signalCh, os.Interrupt)
