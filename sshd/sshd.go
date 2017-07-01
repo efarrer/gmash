@@ -62,10 +62,6 @@ func (sc *shellConf) ErrorHandler(err error) {
 	sc.errorHandler(err)
 }
 
-type exitStatusMsg struct {
-	Status uint32
-}
-
 func _handlePtyRequest(shell string, channel ssh.Channel, req *ssh.Request) error {
 	ptyReq, err := payload.ParsePtyReq(req.Payload)
 	if err != nil {
