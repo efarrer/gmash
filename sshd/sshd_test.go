@@ -431,17 +431,23 @@ func TestIntegration_ClientDisconnects(t *testing.T) {
 	assert.NoError(t, err)
 	defer closer()
 
+	exits := [][]byte{
+		[]byte("exit\n"),
+		[]byte{0x04, 0x0a},
+	}
 	var wg sync.WaitGroup
-	for i := 0; i < 2; i++ {
-		wg.Add(1)
-		go func() {
-			defer wg.Done()
-			cmd := exec.Command("/usr/bin/ssh", "-t", "-t", "-o", "UserKnownHostsFile=/dev/null", "-o", "StrictHostKeyChecking=no", "-p", strconv.Itoa(port), "localhost")
-			cmd.Stdin = bytes.NewBuffer([]byte("exit\n"))
-			cmd.Start()
-			err := cmd.Wait()
-			assert.NoError(t, err)
-		}()
+	for _, exit := range exits {
+		for i := 0; i < 2; i++ {
+			wg.Add(1)
+			go func(exit []byte) {
+				defer wg.Done()
+				cmd := exec.Command("/usr/bin/ssh", "-t", "-t", "-o", "UserKnownHostsFile=/dev/null", "-o", "StrictHostKeyChecking=no", "-p", strconv.Itoa(port), "localhost")
+				cmd.Stdin = bytes.NewBuffer(exit)
+				cmd.Start()
+				err := cmd.Wait()
+				assert.NoError(t, err)
+			}(exit)
+		}
 	}
 	wg.Wait()
 }

@@ -5,7 +5,6 @@ import (
 	"io"
 	"net"
 	"os/exec"
-	"sync"
 
 	"github.com/efarrer/gmash/payload"
 
@@ -73,25 +72,26 @@ func _handlePtyRequest(shell string, channel ssh.Channel, req *ssh.Request) erro
 	if err != nil {
 		return fmt.Errorf("Unable to create pty request (%s)", err)
 	}
-	var wg sync.WaitGroup
-	wg.Add(2)
+
+	doneCh := make(chan struct{})
 	// Note that channel is a ReadWriter to handling the requests stdin and
 	// stdout. Stderr is with channel.Stderr()
 	go func() {
 		_, _ = io.Copy(channel, ptyFile)
-		wg.Done()
+		doneCh <- struct{}{}
 	}()
 	go func() {
 		_, _ = io.Copy(ptyFile, channel)
-		wg.Done()
+		doneCh <- struct{}{}
 	}()
 
 	go func() {
-		wg.Wait()
+		<-doneCh
 		// TODO get the actual exit status instead of just using 0
 		channel.SendRequest("exit-status", false, ssh.Marshal(&struct{ ExitStatus uint32 }{0}))
 		channel.Close()
 		ptyFile.Close()
+		<-doneCh
 	}()
 
 	return nil
