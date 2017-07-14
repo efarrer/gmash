@@ -65,7 +65,7 @@ func main() {
 
 	ctx, cancel := context.WithCancel(context.Background())
 
-	console := console.New(os.Stderr)
+	console := console.New(os.Stdout)
 
 	listener, err := sshd.SSHServer("0.0.0.0:", &sshConf, shellConf)
 	if err != nil {
