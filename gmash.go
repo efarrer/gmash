@@ -21,7 +21,10 @@ import (
 )
 
 func main() {
+	console := console.New(os.Stdout)
 	logger := log.New(os.Stderr, "", 0)
+
+	console.Printf("GMASH (Version: %s)\n", VERSION)
 
 	var local = flag.Bool("local", false, "Whether to only allow connections over the local network")
 
@@ -64,8 +67,6 @@ func main() {
 	fpMD5, fpSHA256 := auth.GetFingerPrint(signer)
 
 	ctx, cancel := context.WithCancel(context.Background())
-
-	console := console.New(os.Stdout)
 
 	listener, err := sshd.SSHServer("0.0.0.0:", &sshConf, shellConf)
 	if err != nil {
