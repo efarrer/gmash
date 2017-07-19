@@ -16,6 +16,7 @@ import (
 	"github.com/efarrer/gmash/ip"
 	"github.com/efarrer/gmash/ngrok"
 	"github.com/efarrer/gmash/sshd"
+	"github.com/efarrer/gmash/version"
 
 	"golang.org/x/crypto/ssh"
 )
@@ -24,7 +25,13 @@ func main() {
 	console := console.New(os.Stdout)
 	logger := log.New(os.Stderr, "", 0)
 
-	console.Printf("GMASH (Version: %s)\n", VERSION)
+	console.Printf("GMASH (Version: %s)\n", version.String)
+	latest, err := version.GetLatestVersion()
+	if err != nil {
+		console.Warn().Printf("Unable to find the latest version of gmash (%s)\n", err)
+	} else if latest != version.String {
+		console.Warn().Printf("A newer version (%s) of gmash is available!\n", latest)
+	}
 
 	var local = flag.Bool("local", false, "Whether to only allow connections over the local network")
 
