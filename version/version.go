@@ -8,7 +8,7 @@ import (
 )
 
 const (
-	url    = "https://raw.githubusercontent.com/efarrer/gmash/blob/master/version/version.go"
+	url    = "https://raw.githubusercontent.com/efarrer/gmash/master/version/version.go"
 	String = "0.0.1"
 )
 
