@@ -28,9 +28,9 @@ func main() {
 	console.Printf("GMASH (Version: %s)\n", version.String)
 	latest, err := version.GetLatestVersion()
 	if err != nil {
-		console.Warn().Printf("Unable to find the latest version of gmash (%s)\n", err)
+		console.Warn().Printf("Unable to find the latest version of gmash (%s)\n\n", err)
 	} else if latest != version.String {
-		console.Warn().Printf("A newer version (%s) of gmash is available!\n", latest)
+		console.Warn().Printf("A newer version (%s) of gmash is available!\n\n", latest)
 	}
 
 	var local = flag.Bool("local", false, "Whether to only allow connections over the local network")
