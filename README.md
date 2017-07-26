@@ -2,7 +2,7 @@
 
 Give Me A SHell
 
-Allow others temporarily and securely ssh into your account.
+Allow others to temporarily and securely ssh into your account.
 
 # Usage
 Allow someone to securely login to your local account.
@@ -11,6 +11,8 @@ Allow someone to securely login to your local account.
 Only allow connections from your local network
 
 `> ./gmash -local`
+
+If you want to share your session with another user you can do so with tmux or screen.
 
 # Development
 
