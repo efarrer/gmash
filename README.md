@@ -10,7 +10,7 @@ If you have go installed
 `> go get github.com/efarrer/gmash`
 
 # Usage
-Allow someone to securely login to your local account.
+Allow someone to securely login to your local account. Must have ngrok installed and configured.
 
 `> ./gmash`
 
