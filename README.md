@@ -4,8 +4,14 @@ Give Me A SHell
 
 Allow others to temporarily and securely ssh into your account.
 
+# Install
+If you have go installed
+
+`> go get github.com/efarrer/gmash`
+
 # Usage
 Allow someone to securely login to your local account.
+
 `> ./gmash`
 
 Only allow connections from your local network
