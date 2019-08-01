@@ -69,7 +69,7 @@ func (rs Response) String() string {
 		res += fmt.Sprintf("%d %s", rs.Err.Reason, rs.Err.Err)
 	}
 	if rs.Value != nil {
-		res += fmt.Sprintf("%s %s", rs.Value.Host, rs.Value.Port)
+		res += fmt.Sprintf("%s %d", rs.Value.Host, rs.Value.Port)
 	}
 	return res
 }
